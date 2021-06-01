@@ -30,6 +30,9 @@ class Scraper extends Component {
               <input type="text" className="form-control" id="pages" />
             </div>
           </div>
+          <div className="row d-flex justify-content-center align-items-center">
+            <button className="btn-custom-light">Get Reviews</button>
+          </div>
         </div>
       </div>
     );
