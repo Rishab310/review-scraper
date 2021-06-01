@@ -9,10 +9,12 @@ class Scraper extends Component {
   render() {
     return (
       <div className="wrapper">
-        <br /><br /><br />
+        <br /><br />
         <div className="container">
           <div className="row">
-            <h1 className="primary-heading font-weight-bold text-center">Amazon Review Scraper</h1>
+            <div className="col-12">
+            <h1 className="primary-heading text-center">Amazon Review Scraper</h1>
+            </div>
           </div>
           <div className="row d-flex justify-content-center align-items-center mt-5">
             <div className="col-12 col-md-2 mb-4">

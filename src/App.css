@@ -14,7 +14,7 @@ body {
 
 .primary-heading {
   font-family: "bebas neue", sans-serif;
-  font-size: 48px;
+  font-size: 54px;
   letter-spacing: 0.01em;
   color: #61dafb;
   font-weight: normal;
@@ -28,7 +28,7 @@ body {
 }
 
 .form-label {
-  font-size: 19px;
+  font-size: 18px;
   font-weight: 500;
   font-family: "Roboto", sans-serif;
   color: azure;
@@ -43,7 +43,7 @@ body {
   cursor: pointer;
   font-weight: 500;
   width: 160px !important;
-  font-size: 19px;
+  font-size: 18px;
   color: azure;
 }
 .btn-custom-light:hover {
