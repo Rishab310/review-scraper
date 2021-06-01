@@ -35,7 +35,7 @@ class Scraper extends Component {
             </div>
           </div>
           <Form onSubmit={this.onSubmit}>
-            <div className="row d-flex justify-content-center align-items-center mt-5">
+            <div className="row d-flex justify-content-center align-items-center px-4 px-md-0 mt-5">
               <div className="col-12 col-md-2 mb-4">
                 <label for="url" className="form-label text-light m-0">Enter Product URL : </label>
               </div>
@@ -43,7 +43,7 @@ class Scraper extends Component {
                 <input type="text" className="form-control" id="url" name="url" value={this.state.url} onChange={this.handleChange} required />
               </div>
             </div>
-            <div className="row d-flex justify-content-center align-items-center">
+            <div className="row d-flex justify-content-center align-items-center px-4 px-md-0">
               <div className="col-12 col-md-2 mb-4">
                 <label for="pages" className="form-label text-light m-0">Enter No. Pages : </label>
               </div>
@@ -51,7 +51,7 @@ class Scraper extends Component {
                 <input type="text" className="form-control" id="pages" name="pages" value={this.state.pages} onChange={this.handleChange} required />
               </div>
             </div>
-            <div className="row d-flex justify-content-center align-items-center">
+            <div className="row d-flex justify-content-center align-items-center px-4 px-md-0">
               <button className="btn-custom-light">Get Reviews</button>
             </div>
           </Form>
