@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { Form } from "reactstrap";
 import axios from 'axios';
+import fileDownload from 'js-file-download';
 
 class Scraper extends Component {
   constructor(props) {
     super(props);
     this.state = {
       url: "",
-      pages: 0
+      pages: null,
+      message:"",
     }
     this.handleChange = this.handleChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -23,6 +25,7 @@ class Scraper extends Component {
   onSubmit = (event) => {
     event.preventDefault();
     // console.log("URL : " + this.state.url + "\nPages : " + this.state.pages);
+    this.setState({ message: "Please Wait !! Data is Scraping ...." });
     this.summary();
     this.reviews();
   }
@@ -34,8 +37,15 @@ class Scraper extends Component {
           "pages": this.state.pages
         }
       });
+      if (res.status === 200) {
+        // this.setState({ message: "The summary and reviews CSV file has been downloaded." });
+        fileDownload(JSON.stringify(res.data.message), "summary.txt");
+        // fileDownload(res.data.message, "summary.json");\
+        console.log(res.data.message);
+      }
       console.log(res);
     } catch (err) {
+      this.setState({ message: "Error : Check the URL or network connection." });
       console.log(err);
     }
   };
@@ -47,14 +57,20 @@ class Scraper extends Component {
           "pages": this.state.pages
         }
       });
+      
+      if (res.status === 200) {
+        this.setState({ message: "The summary and reviews CSV file has been downloaded." });
+        fileDownload(res.data, "output.csv");
+      }
       console.log(res);
     } catch (err) {
+      this.setState({ message: "Error : Check the URL or network connection." });
       console.log(err);
     }
   };
 
-
   render() {
+    // const Render
     return (
       <div className="wrapper">
         <br /><br />
@@ -84,7 +100,28 @@ class Scraper extends Component {
             <div className="row d-flex justify-content-center align-items-center px-4 px-md-0">
               <button className="btn-custom-light">Get Reviews</button>
             </div>
+            <br />
+            <div className="row d-flex justify-content-center align-items-center px-4 px-md-0">
+              <div className="col-12 col-md-6 mb-4">
+                <label htmlFor="pages" className="form-label m-0 text-center w-100"
+                  style={{ color: "#61dafb" }}
+                >{this.state.message}</label>
+              </div>
+            </div>
+            <div className="row d-flex justify-content-center align-items-center px-4 px-md-0">
+              <div className="col-12 col-md-7 form-label" style={{ color:"white",fontSize:"17px"}}>
+                Note :-
+                <p>1. Kindly add the URL of product after going to all reviews page of the product.</p>
+                Example - 
+                <p>
+                  https://www.amazon.in/Apple-MacBook-Pro-8th-Generation-Intel-Core-i5/product-reviews/B0883JQQJQ/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews
+                </p>
+                <p>2. Each page contains 9-10 reviews. Please enter number of pages accordingly.</p>
+                <p>3. If both files are not downloaded at once, kindly try again !!</p>
+              </div>
+            </div>
           </Form>
+          
         </div>
       </div>
     );

@@ -2,9 +2,10 @@ from flask import Flask, request, make_response, jsonify, send_from_directory , 
 from flask_cors import CORS ,cross_origin
 import subprocess
 import amazon_reviews
+import amazon_reviews1
 import requests
 from bs4 import BeautifulSoup
-
+import os
 configs = {
     "ORIGINS": [
         "http://localhost:3000/",
@@ -31,6 +32,8 @@ def scrape():
         + " -a page="
         + pages
     )
+    if os.path.exists("output.csv"):
+        os.remove("output.csv")
     process = subprocess.run(cmd)
     try:
         return send_file("H:/Web/Projects/Review Scrapper/Review-Scraper-Project/output.csv", as_attachment=True)
