@@ -2,7 +2,6 @@ from flask import Flask, request, make_response, jsonify, send_from_directory , 
 from flask_cors import CORS ,cross_origin
 import subprocess
 import amazon_reviews
-import amazon_reviews1
 import requests
 from bs4 import BeautifulSoup
 import os
