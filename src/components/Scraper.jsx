@@ -22,22 +22,31 @@ class Scraper extends Component {
   }
   onSubmit = (event) => {
     event.preventDefault();
-    console.log("URL : " + this.state.url + "\nPages : " + this.state.pages);
+    // console.log("URL : " + this.state.url + "\nPages : " + this.state.pages);
     this.summary();
+    this.reviews();
   }
   summary = async () => {
     try {
-      const res = await axios.post(`http://127.0.0.1:5000/download-summary`, {
-        url: this.state.url,
-        pages:this.state.pages
+      const res = await axios.get(`http://127.0.0.1:5000/download-summary`, {
+        params: {
+          "url": this.state.url,
+          "pages": this.state.pages
+        }
       });
-      // if (res.data.status === 200) {
-      //   this.setRegisterState(res.data.msg["ispaid"]);
-      //   this.setResponseData(res.data.msg);
-      // }
-      // else {
-      //   console.log(res);
-      // }
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  reviews = async () => {
+    try {
+      const res = await axios.get(`http://127.0.0.1:5000/download-csv-file`, {
+        params: {
+          "url": this.state.url,
+          "pages": this.state.pages
+        }
+      });
       console.log(res);
     } catch (err) {
       console.log(err);

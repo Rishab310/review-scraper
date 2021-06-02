@@ -15,27 +15,11 @@ class AmazonReviewsSpider(scrapy.Spider):
         super(AmazonReviewsSpider, self).__init__(*args, **kwargs)
         # self.start_urls = [url]
         self.page_no = page
-
         # Base URL for the MacBook air reviews
         base_url = url + "&pageNumber="
-        # myBaseUrl = input()
-        # Baseurl will be input from user
-        # start_urls = [myBaseUrl]
-        # Creating list of urls to be scraped by appending page number a the end of base url
-        # number of pages to be taken from user
-        # print("\n \n \n \n         ",self.page_no,"\n BASE URL    ",base_url)
         for i in range(1, int(self.page_no) + 1):
             self.start_urls.append(base_url + str(i))
-        
-        # for _ in self.start_urls:
-        #     print("URL \n",_)
-    # Defining a Scrapy parser
     def parse(self, response):
-
-        # print(self.url)
-        # start_urls = []
-        # for i in range(1, 2):
-        #     start_urls.append(myBaseUrl + str(i))
         # print(self.url)
         data = response.css("#cm_cr-review_list")
         # Collecting product star ratings
