@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { Form, FormGroup, FormFeedback } from "reactstrap";
+import { Form } from "reactstrap";
+import axios from 'axios';
 
 class Scraper extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      url : "",
-      pages : null
+      url: "",
+      pages: 0
     }
     this.handleChange = this.handleChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -16,13 +17,33 @@ class Scraper extends Component {
     const value = (target.type === 'checkbox') ? target.checked : target.value;
     const name = target.name;
     this.setState({
-        [name]: value
+      [name]: value
     });
   }
   onSubmit = (event) => {
     event.preventDefault();
-    console.log("URL : "+this.state.url+"\nPages : "+this.state.pages);
+    console.log("URL : " + this.state.url + "\nPages : " + this.state.pages);
+    this.summary();
   }
+  summary = async () => {
+    try {
+      const res = await axios.post(`http://127.0.0.1:5000/download-summary`, {
+        url: this.state.url,
+        pages:this.state.pages
+      });
+      // if (res.data.status === 200) {
+      //   this.setRegisterState(res.data.msg["ispaid"]);
+      //   this.setResponseData(res.data.msg);
+      // }
+      // else {
+      //   console.log(res);
+      // }
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
 
   render() {
     return (
@@ -31,13 +52,13 @@ class Scraper extends Component {
         <div className="container">
           <div className="row">
             <div className="col-12">
-            <h1 className="primary-heading text-center">Amazon Review Scraper</h1>
+              <h1 className="primary-heading text-center">Amazon Review Scraper</h1>
             </div>
           </div>
           <Form onSubmit={this.onSubmit}>
             <div className="row d-flex justify-content-center align-items-center px-4 px-md-0 mt-5">
               <div className="col-12 col-md-2 mb-4">
-                <label for="url" className="form-label text-light m-0">Enter Product URL : </label>
+                <label htmlFor="url" className="form-label text-light m-0">Enter Product URL : </label>
               </div>
               <div className="col-12 col-md-4 mb-4">
                 <input type="text" className="form-control" id="url" name="url" value={this.state.url} onChange={this.handleChange} required />
@@ -45,7 +66,7 @@ class Scraper extends Component {
             </div>
             <div className="row d-flex justify-content-center align-items-center px-4 px-md-0">
               <div className="col-12 col-md-2 mb-4">
-                <label for="pages" className="form-label text-light m-0">Enter No. Pages : </label>
+                <label htmlFor="pages" className="form-label text-light m-0">Enter No. Pages : </label>
               </div>
               <div className="col-12 col-md-4 mb-4">
                 <input type="text" className="form-control" id="pages" name="pages" value={this.state.pages} onChange={this.handleChange} required />
@@ -60,6 +81,7 @@ class Scraper extends Component {
     );
   }
 }
+
 
 export default Scraper;
 
