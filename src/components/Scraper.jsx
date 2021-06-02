@@ -31,7 +31,7 @@ class Scraper extends Component {
   }
   summary = async () => {
     try {
-      const res = await axios.get(`http://127.0.0.1:5000/download-summary`, {
+      const res = await axios.get(`https://review-scraper-server.herokuapp.com/download-summary`, {
         params: {
           "url": this.state.url,
           "pages": this.state.pages
@@ -51,7 +51,7 @@ class Scraper extends Component {
   };
   reviews = async () => {
     try {
-      const res = await axios.get(`http://127.0.0.1:5000/download-csv-file`, {
+      const res = await axios.get(`https://review-scraper-server.herokuapp.com/download-csv-file`, {
         params: {
           "url": this.state.url,
           "pages": this.state.pages
