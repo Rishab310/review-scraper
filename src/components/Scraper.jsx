@@ -10,25 +10,26 @@ const convert = (data, fields) => {
   return csv;
 }
 class Scraper extends Component {
-  
+
   constructor(props) {
     super(props);
     this.state = {
       url: "",
       pages: null,
       message: "",
-      summaryHeaders: {
-        "product name": "Product Name",
-        "overall rating": "Overall Rating",
-        "number of global reviews and ratings": "GLobal Ratings",
-        "five stars": "Five Star",
-        "four stars": "Four Star",
-        "three stars": "Three star",
-        "two stars": "Two Star",
-        "one stars": 'One Star',
+      showTable: false,
+      summaryData: {
+        "five stars": "",
+        "four stars": "",
+        "number of global reviews and ratings": "",
+        "one stars": "",
+        "overall rating": "",
+        "product name": "",
+        "three stars": "",
+        "two stars": "",
       },
       summaryFields: { fields: ["product name", "overall rating", "number of global reviews and ratings", "five stars", "four stars", "three stars", "two stars", "one stars"] },
-      reviewsFields: { fields: ["date", "name", "title", "stars", "review"]}
+      reviewsFields: { fields: ["date", "name", "title", "stars", "review"] }
 
     }
     this.handleChange = this.handleChange.bind(this);
@@ -44,7 +45,6 @@ class Scraper extends Component {
   }
   onSubmit = (event) => {
     event.preventDefault();
-    // console.log("URL : " + this.state.url + "\nPages : " + this.state.pages);
     this.setState({ message: "Please Wait !! Data is Scraping ...." });
     this.summary();
     this.reviews();
@@ -58,10 +58,10 @@ class Scraper extends Component {
         }
       });
       if (res.status === 200) {
-        fileDownload(convert(res.data.message,this.state.summaryFields), "summary.csv");
+        this.setState({ summaryData: res.data.message, showTable:true });
+        fileDownload(convert(res.data.message, this.state.summaryFields), "summary.csv");
         console.log(JSON.parse(JSON.stringify(res.data.message)));
       }
-      // console.log(res);
     } catch (err) {
       this.setState({ message: "Error : Check the URL or network connection." });
       console.log(err);
@@ -75,7 +75,6 @@ class Scraper extends Component {
           "pages": this.state.pages
         }
       });
-      
       if (res.status === 200) {
         this.setState({ message: "The summary and reviews CSV file has been downloaded." });
         fileDownload(convert(res.data.msg, this.state.reviewsFields), "reviews.csv");
@@ -125,12 +124,59 @@ class Scraper extends Component {
                 >{this.state.message}</label>
               </div>
             </div>
+            <div className={(this.state.showTable) ? "" : "d-none"}>
+              <div className="row d-flex justify-content-center align-items-center px-4 px-md-0">
+                <div className="col-12 col-md-7 mb-4">
+                  <table class="table table-borderless table-light">
+                    <thead>
+                      <tr>
+                        <th scope="col" colspan="2" className="text-center text-bold"><h4>Summary</h4></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">Product Name</th>
+                        <td>{this.state.summaryData['product name']}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Overall Rating</th>
+                        <td>{this.state.summaryData['overall rating']}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Global Reviews</th>
+                        <td>{this.state.summaryData['number of global reviews and ratings']}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Five Stars</th>
+                        <td>{this.state.summaryData['five stars']}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Four Stars</th>
+                        <td>{this.state.summaryData['four stars']}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Three Stars</th>
+                        <td>{this.state.summaryData['three stars']}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Two Stars</th>
+                        <td>{this.state.summaryData['two stars']}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">One Stars</th>
+                        <td>{this.state.summaryData['one stars']}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
             <div className="row d-flex justify-content-center align-items-center px-4 px-md-0">
-              <div className="col-12 col-md-7 form-label" style={{ color:"white",fontSize:"17px"}}>
+              <div className="col-12 col-md-7 form-label" style={{ color: "white", fontSize: "17px" }}>
                 Note :-
                 <p>1. Kindly add the URL of product after going to all reviews page of the product.</p>
-                Example - 
-                <p>
+                Example -
+                <p className="dont-break-out">
                   https://www.amazon.in/Apple-MacBook-Pro-8th-Generation-Intel-Core-i5/product-reviews/B0883JQQJQ/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews
                 </p>
                 <p>2. Each page contains 9-10 reviews. Please enter number of pages accordingly.</p>
@@ -138,7 +184,7 @@ class Scraper extends Component {
               </div>
             </div>
           </Form>
-          
+
         </div>
       </div>
     );
