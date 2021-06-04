@@ -3,13 +3,33 @@ import { Form } from "reactstrap";
 import axios from 'axios';
 import fileDownload from 'js-file-download';
 
+const JSONtoCSV = require("json2csv").parse;
+
+const convert = (data, fields) => {
+  const csv = JSONtoCSV(data, fields);
+  return csv;
+}
 class Scraper extends Component {
+  
   constructor(props) {
     super(props);
     this.state = {
       url: "",
       pages: null,
-      message:"",
+      message: "",
+      summaryHeaders: {
+        "product name": "Product Name",
+        "overall rating": "Overall Rating",
+        "number of global reviews and ratings": "GLobal Ratings",
+        "five stars": "Five Star",
+        "four stars": "Four Star",
+        "three stars": "Three star",
+        "two stars": "Two Star",
+        "one stars": 'One Star',
+      },
+      summaryFields: { fields: ["product name", "overall rating", "number of global reviews and ratings", "five stars", "four stars", "three stars", "two stars", "one stars"] },
+      reviewsFields: { fields: ["date", "name", "title", "stars", "review"]}
+
     }
     this.handleChange = this.handleChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -38,12 +58,10 @@ class Scraper extends Component {
         }
       });
       if (res.status === 200) {
-        // this.setState({ message: "The summary and reviews CSV file has been downloaded." });
-        fileDownload(JSON.stringify(res.data.message), "summary.txt");
-        // fileDownload(res.data.message, "summary.json");\
-        console.log(res.data.message);
+        fileDownload(convert(res.data.message,this.state.summaryFields), "summary.csv");
+        console.log(JSON.parse(JSON.stringify(res.data.message)));
       }
-      console.log(res);
+      // console.log(res);
     } catch (err) {
       this.setState({ message: "Error : Check the URL or network connection." });
       console.log(err);
@@ -60,9 +78,9 @@ class Scraper extends Component {
       
       if (res.status === 200) {
         this.setState({ message: "The summary and reviews CSV file has been downloaded." });
-        fileDownload(res.data, "output.csv");
+        fileDownload(convert(res.data.msg, this.state.reviewsFields), "reviews.csv");
+        console.log(res.data.msg);
       }
-      console.log(res);
     } catch (err) {
       this.setState({ message: "Error : Check the URL or network connection." });
       console.log(err);
@@ -70,7 +88,6 @@ class Scraper extends Component {
   };
 
   render() {
-    // const Render
     return (
       <div className="wrapper">
         <br /><br />
