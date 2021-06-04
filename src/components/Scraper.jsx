@@ -16,7 +16,8 @@ class Scraper extends Component {
     this.state = {
       url: "",
       pages: null,
-      message: "",
+      summaryMessage: "",
+      reviewMessage: "",
       showTable: false,
       summaryData: {
         "five stars": "",
@@ -45,7 +46,7 @@ class Scraper extends Component {
   }
   onSubmit = (event) => {
     event.preventDefault();
-    this.setState({ message: "Please Wait !! Data is Scraping ...." });
+    this.setState({ summaryMessage: "Please Wait !! Fetching Summary ....", reviewMessage: "Please Wait !! Scraping Reviews ...."});
     this.summary();
     this.reviews();
   }
@@ -58,12 +59,12 @@ class Scraper extends Component {
         }
       });
       if (res.status === 200) {
-        this.setState({ summaryData: res.data.message, showTable:true });
+        this.setState({ summaryData: res.data.message, showTable: true, summaryMessage: "The summary CSV file has been downloaded." });
         fileDownload(convert(res.data.message, this.state.summaryFields), "summary.csv");
         console.log(JSON.parse(JSON.stringify(res.data.message)));
       }
     } catch (err) {
-      this.setState({ message: "Error : Check the URL or network connection." });
+      this.setState({ summaryMessage: "Error : Summary not Downloaded Try again !!" });
       console.log(err);
     }
   };
@@ -76,12 +77,12 @@ class Scraper extends Component {
         }
       });
       if (res.status === 200) {
-        this.setState({ message: "The summary and reviews CSV file has been downloaded." });
+        this.setState({ reviewMessage: "The reviews CSV file has been downloaded." });
         fileDownload(convert(res.data.msg, this.state.reviewsFields), "reviews.csv");
         console.log(res.data.msg);
       }
     } catch (err) {
-      this.setState({ message: "Error : Check the URL or network connection." });
+      this.setState({ reviewMessage: "Error : Reviews not Downloaded Try again !!" });
       console.log(err);
     }
   };
@@ -121,12 +122,20 @@ class Scraper extends Component {
               <div className="col-12 col-md-6 mb-4">
                 <label htmlFor="pages" className="form-label m-0 text-center w-100"
                   style={{ color: "#61dafb" }}
-                >{this.state.message}</label>
+                >{this.state.summaryMessage}</label>
               </div>
             </div>
+            <div className="row d-flex justify-content-center align-items-center px-4 px-md-0">
+              <div className="col-12 col-md-6">
+                <label htmlFor="pages" className="form-label m-0 text-center w-100"
+                  style={{ color: "#61dafb" }}
+                >{this.state.reviewMessage}</label>
+              </div>
+            </div>
+            <br />
             <div className={(this.state.showTable) ? "" : "d-none"}>
               <div className="row d-flex justify-content-center align-items-center px-4 px-md-0">
-                <div className="col-12 col-md-7 mb-4">
+                <div className="col-12 col-md-7">
                   <table class="table table-borderless table-light">
                     <thead>
                       <tr>
